@@ -1,0 +1,19 @@
+# 가상환경
+env1/
+
+# Python 캐시 파일
+__pycache__/
+*.py[cod]
+*.pyo
+
+# 환경 파일
+.env
+*.env
+
+# IDE 관련 파일
+.vscode/
+.idea/
+
+# OS 파일
+.DS_Store
+Thumbs.db
