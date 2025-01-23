@@ -7,8 +7,27 @@
     <img src="{{ post.image.url }}" alt="{{ post.title }}">
   {% endif %}
   <p>Tags: {{ post.tags }}</p>
-  <p>Likes: {{ post.likes }}</p>
+  <p>Likes: <span id="like-count">{{ post.likes }}</span></p>
+  <div style="text-align: center; margin-top: 20px;">
+    <button id="like-button" data-url="{% url 'post-like' post.pk %}" data-csrf="{{ csrf_token }}">Like</button>
+  </div>
   <a href="{% url 'post_update' post.pk %}">Edit</a>
   <a href="{% url 'post_delete' post.pk %}">Delete</a>
   <a href="{% url 'post_list' %}">Back to List</a>
+
+  <script>
+    document.getElementById('like-button').addEventListener('click', function() {
+      fetch(this.dataset.url, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': this.dataset.csrf,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('like-count').textContent = data.likes;
+      });
+    });
+  </script>
 {% endblock %}

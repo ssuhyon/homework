@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics
 from .models import CustomUser
 from .serializers import UserSerializer
@@ -9,7 +10,6 @@ class UserListCreateAPIView(generics.ListCreateAPIView):
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
@@ -45,7 +45,8 @@ class SignUpView(CreateView):
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password1')
         user = authenticate(username=username, password=password)
-        login(self.request, user)
+        if user is not None:
+            login(self.request, user)
         return response
     model = CustomUser
     form_class = CustomUserCreationForm
